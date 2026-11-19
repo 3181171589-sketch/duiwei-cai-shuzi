@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#eef7ff">
+  <meta name="description" content="创建房间，和朋友在线对战对位猜数字。">
+  <title>对位猜数字 · 双人在线对战</title>
+  <style>
+    :root{color-scheme:light;--ink:#17324d;--muted:#7890a8;--blue:#397ce8;--blue2:#69b8fb;--line:#e5eef8;--green:#159b73;--red:#d95c68;--card:rgba(255,255,255,.91);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC","Microsoft YaHei",sans-serif}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--ink);background:radial-gradient(ellipse at 10% 0%,#d4edff 0,transparent 34%),radial-gradient(ellipse at 95% 28%,#e0e9ff 0,transparent 30%),linear-gradient(145deg,#effaff,#f4f7ff 55%,#e9f5ff);padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom)}
+    button,input{font:inherit}button{touch-action:manipulation}.top{max-width:1080px;height:74px;margin:auto;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;gap:11px;align-items:center;text-decoration:none;color:var(--ink);font-weight:850;letter-spacing:.01em}.brand-icon{width:38px;height:38px;border-radius:14px;display:grid;place-items:center;color:white;background:linear-gradient(145deg,#3285ec,#7fcfff);box-shadow:0 8px 20px #438ee544;font-size:19px}.net{display:flex;align-items:center;gap:8px;border:1px solid #dce8f3;background:#ffffffab;border-radius:99px;padding:8px 12px;color:var(--muted);font-size:12px;font-weight:700}.dot{width:8px;height:8px;border-radius:50%;background:#f2b84b}.net.on .dot{background:#20b486;box-shadow:0 0 0 4px #20b48620}.net.off .dot{background:#e56b71;box-shadow:0 0 0 4px #e56b7120}
+    main{max-width:970px;margin:24px auto 64px}.card{background:var(--card);border:1px solid #fff;border-radius:26px;box-shadow:0 20px 65px #335b8110,0 3px 10px #335b8108;backdrop-filter:blur(12px)}.home{max-width:610px;margin:5vh auto 0;padding:clamp(24px,6vw,46px)}.eyebrow{display:inline-flex;align-items:center;gap:7px;border-radius:99px;background:#eaf4ff;color:#4a7eb1;padding:7px 11px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.home h1{font-size:clamp(30px,7vw,46px);line-height:1.18;letter-spacing:-.04em;margin:19px 0 10px}.home h1 span{color:var(--blue)}.lead{color:var(--muted);line-height:1.75;margin:0 0 25px}.section-label{font-size:12px;color:#7790a8;font-weight:800;margin:23px 0 9px}.row{display:flex;gap:10px}.input{width:100%;min-width:0;border:1px solid #d9e6f2;background:#f9fcff;border-radius:15px;padding:14px 15px;color:var(--ink);outline:none;transition:.18s}.input:focus{border-color:#79b7ef;box-shadow:0 0 0 4px #65a9ed20}.code-input{font-size:19px;font-weight:800;letter-spacing:.18em}.btn{border:0;border-radius:15px;padding:13px 18px;min-height:48px;font-weight:800;cursor:pointer;transition:transform .15s,filter .15s,box-shadow .15s}.btn:hover{filter:brightness(1.03);transform:translateY(-1px)}.btn:active{transform:translateY(0)}.btn:disabled{cursor:not-allowed;opacity:.48;transform:none}.primary{color:white;background:linear-gradient(115deg,#397ce8,#59a9f3);box-shadow:0 9px 20px #397ce82c}.secondary{color:#4677a5;background:#edf5fc}.danger{color:#ca5660;background:#fff0f1}.wide{width:100%}.home .row .primary{flex:0 0 auto}.divider{height:1px;background:var(--line);margin:23px 0}.error-box,.notice{padding:12px 14px;border-radius:14px;line-height:1.55;font-size:13px}.error-box{color:#b94150;background:#fff0f1;border:1px solid #ffe0e3;margin-top:15px}.notice{color:#587a99;background:#edf7ff}.tips{font-size:12px;line-height:1.8;color:#8ba0b5;margin-top:22px}
+    .game-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 22px;margin-bottom:14px}.room-meta{display:flex;align-items:center;gap:12px;min-width:0}.room-symbol{width:42px;height:42px;border-radius:15px;background:#eaf4ff;display:grid;place-items:center;font-size:20px}.room-code{font-size:19px;font-weight:900;letter-spacing:.12em}.subtle{font-size:12px;color:var(--muted);margin-top:3px}.head-actions{display:flex;gap:8px;flex-shrink:0}.small{font-size:12px;padding:10px 13px;min-height:40px;border-radius:12px}.statusbar{padding:14px 18px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:10px}.status-title{font-weight:900}.status-desc{font-size:12px;color:var(--muted);margin-top:4px}.score{display:flex;align-items:center;gap:9px;border-radius:14px;padding:9px 12px;background:#f1f7ff;font-weight:900;white-space:nowrap}.score b{color:var(--blue);font-size:18px}.players{display:grid;grid-template-columns:1fr 1fr;gap:14px}.player{padding:18px 19px;position:relative;overflow:hidden}.player.current{border-color:#79b9f4;box-shadow:0 0 0 3px #69acec17,0 15px 35px #335b8110}.player-top{display:flex;align-items:center;justify-content:space-between;gap:7px}.avatar{width:38px;height:38px;border-radius:13px;background:linear-gradient(145deg,#dff2ff,#e9e9ff);display:grid;place-items:center;font-size:17px}.pname{font-weight:850;flex:1}.badge{font-size:10px;font-weight:800;color:#64829d;background:#f1f6fa;padding:6px 8px;border-radius:99px;white-space:nowrap}.badge.online{color:#148366;background:#e8f8f2}.badge.offline{color:#bf6468;background:#fff0f0}.player-state{border-top:1px solid #edf2f7;margin-top:14px;padding-top:12px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between}.you{color:#367ed1;font-size:10px;font-weight:900}.stage{margin-top:14px;padding:clamp(19px,4vw,28px)}.stage-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:16px}.stage h2{font-size:19px;margin:0 0 5px;letter-spacing:-.02em}.stage p{margin:0;color:var(--muted);font-size:13px;line-height:1.65}.stage-content{max-width:560px;margin:auto}.setup-box{border-radius:19px;padding:18px;background:linear-gradient(135deg,#f4faff,#f6f8ff);border:1px solid #e7f0f8}.digit-row{display:flex;gap:10px;margin:14px 0}.digit-input{text-align:center;font-size:24px;font-weight:900;letter-spacing:.25em}.dice-area{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.dice-box{text-align:center;border:1px solid var(--line);border-radius:18px;background:#fafdff;padding:16px}.die{width:61px;height:61px;margin:8px auto 12px;background:white;border:1px solid #e7eef7;box-shadow:0 8px 20px #31537211;border-radius:18px;display:grid;place-items:center;color:#397ce8;font-size:30px;font-weight:900}.dice-box .btn{width:100%}.roll .die{animation:roll .55s ease}@keyframes roll{0%{transform:rotate(0) scale(.8)}45%{transform:rotate(180deg) scale(1.12)}100%{transform:rotate(360deg) scale(1)}}.guess-line{display:flex;gap:10px}.guess-line .btn{min-width:102px}.current-label{color:#367ed1;font-size:11px;font-weight:900}.history{margin-top:14px;padding:20px 22px}.history-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.history h3{margin:0;font-size:15px}.history-list{display:grid;gap:8px}.history-item{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:14px;padding:11px 12px;border-radius:13px;background:#f7faff;font-size:13px}.guess-code{font-weight:900;font-size:16px;letter-spacing:.12em}.hit{font-weight:900;color:#168b6b}.empty{color:#98aabc;font-size:13px;text-align:center;padding:22px 5px}.bottom{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;color:#8298ac;font-size:11px}.actions{display:flex;gap:8px}.winner{border-radius:18px;padding:17px;background:linear-gradient(120deg,#eaf9f4,#f2f9ff);border:1px solid #d8f0e6;margin-bottom:15px;text-align:center}.winner .trophy{font-size:32px}.winner strong{display:block;font-size:20px;margin:4px}.loader{width:37px;height:37px;border:4px solid #d9eafa;border-top-color:#397ce8;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 13px}@keyframes spin{to{transform:rotate(360deg)}}.loading{text-align:center;padding:90px 20px;color:var(--muted)}.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,16px);opacity:0;pointer-events:none;background:#183650;color:white;padding:12px 17px;border-radius:99px;font-size:13px;font-weight:750;box-shadow:0 10px 30px #16354c30;transition:.22s;z-index:10;max-width:calc(100vw - 28px);text-align:center}.toast.show{transform:translate(-50%,0);opacity:1}.toast.bad{background:#b54752}.modal-backdrop{position:fixed;inset:0;background:#18365055;display:grid;place-items:center;padding:18px;z-index:20}.modal{width:min(100%,440px);padding:25px;text-align:center;background:white;border-radius:24px;box-shadow:0 24px 80px #18365033}.modal h2{margin:6px 0 8px}.modal p{color:var(--muted);line-height:1.6}.modal .btn{margin-top:8px}
+    @media(max-width:650px){body{padding-left:12px;padding-right:12px}.top{height:62px}.home{margin-top:3vh;padding:25px 21px;border-radius:23px}.game-head{padding:15px;border-radius:19px}.head-actions{gap:6px}.head-actions .small{padding:9px 10px}.statusbar{align-items:flex-start;padding:13px 14px}.score{padding:7px 9px;font-size:12px}.players{gap:9px}.player{padding:13px 12px;border-radius:19px}.player-top{flex-wrap:wrap}.pname{font-size:13px}.badge{font-size:9px}.player-state{font-size:11px}.stage{padding:19px 15px;border-radius:21px}.history{padding:16px 14px}.history-item{gap:8px;padding:10px}.bottom{align-items:flex-start;flex-direction:column}.actions{width:100%}.actions .btn{flex:1}.room-code{font-size:17px}.room-symbol{width:38px;height:38px}}
+    @media(max-width:390px){.brand{font-size:14px}.home .row{flex-direction:column}.home .row .primary{width:100%}.players{grid-template-columns:1fr}.player{padding:14px}.player-top{flex-wrap:nowrap}.dice-area{gap:8px}.dice-box{padding:12px 9px}.guess-line{gap:7px}.guess-line .btn{min-width:82px;padding:12px}.code-input{font-size:17px}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/" aria-label="回到首页"><span class="brand-icon">🎲</span><span>对位猜数字</span></a>
+    <div class="net" id="network"><span class="dot"></span><span id="networkText">正在连接</span></div>
+  </header>
+  <main id="app" aria-live="polite"><div class="card loading"><div class="loader"></div>正在连接游戏服务器…</div></main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    (() => {
+      const app = document.getElementById('app');
+      const network = document.getElementById('network');
+      const networkText = document.getElementById('networkText');
+      const toastNode = document.getElementById('toast');
+      const socket = io({ autoConnect: true, reconnection: true, reconnectionAttempts: Infinity });
+      let state = null, roomId = '', token = '', joining = false, pendingRoom = '', toastTimer = null, lastNotice = '', pending = false;
+      let homeError = '', roomPrefill = '';
+      const urlRoom = new URLSearchParams(location.search).get('room') || '';
+      const initialRoom = urlRoom.trim();
+      if (initialRoom) {
+        roomId = initialRoom;
+        token = localStorage.getItem('duiwei-token:' + roomId) || '';
+      }
+      const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const showToast = (text, bad = false) => {
+        toastNode.textContent = text;
+        toastNode.classList.toggle('bad', bad);
+        toastNode.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toastNode.classList.remove('show'), 2600);
+      };
+      const setNetwork = status => {
+        network.classList.toggle('on', status === 'on');
+        network.classList.toggle('off', status === 'off');
+        networkText.textContent = status === 'on' ? '在线' : status === 'off' ? '正在重连' : '正在连接';
+      };
+      const updateUrl = id => {
+        const url = new URL(location.href);
+        if (id) url.searchParams.set('room', id); else url.searchParams.delete('room');
+        history.replaceState({}, '', url);
+      };
+      const resultError = result => result?.message || ({
+        not_found: '房间不存在，请检查房间号或让好友重新创建', full: '房间已满，最多只能有 2 位玩家',
+        invalid_room_id: '房间号需为 4–6 位数字', not_in_room: '你已离开房间，请重新加入',
+        not_your_turn: '现在不是你的回合，或对手已断线', duplicate: '请勿重复提交'
+      }[result?.error] || '操作暂未成功，请检查网络后重试');
+      const saveRoom = (id, newToken) => {
+        roomId = id; token = newToken;
+        localStorage.setItem('duiwei-token:' + id, newToken);
+        updateUrl(id);
+      };
+      function renderHome() {
+        app.innerHTML = `<section class="card home">
+          <div class="eyebrow">✦ 两人实时对战</div>
+          <h1>猜中每一位，<br><span>赢下这一局。</span></h1>
+          <p class="lead">和朋友各自设置三位密码，掷骰决定先手。只有数字和位置同时正确才算命中。</p>
+          <button class="btn primary wide" id="createRoom" ${socket.connected ? '' : 'disabled'}>🎲　创建新房间</button>
+          <div class="divider"></div>
+          <div class="section-label">已有房间号？</div>
+          <form id="joinForm" class="row"><input id="roomInput" class="input code-input" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="输入 4–6 位数字" value="${esc(roomPrefill)}" aria-label="房间号"><button class="btn secondary" type="submit">加入房间</button></form>
+          ${homeError ? `<div class="error-box">${esc(homeError)}</div>` : ''}
+          <div class="tips">无需注册。创建后复制房间链接发给好友。手机和电脑通过同一公开链接加入。</div>
+        </section>`;
+        document.getElementById('createRoom').addEventListener('click', createRoom);
+        const input = document.getElementById('roomInput');
+        input.addEventListener('input', () => { input.value = input.value.replace(/\D/g, '').slice(0, 6); });
+        document.getElementById('joinForm').addEventListener('submit', event => {
+          event.preventDefault();
+          const code = input.value.trim();
+          if (!/^\d{4,6}$/.test(code)) { homeError = '请输入 4–6 位数字房间号。'; roomPrefill = code; return renderHome(); }
+          roomPrefill = code;
+          joinRoom(code, localStorage.getItem('duiwei-token:' + code) || '');
+        });
+      }
+      function joinRoom(id, savedToken = '') {
+        if (joining) return;
+        if (!socket.connected) { homeError = '正在连接服务器，请稍后再试。'; roomPrefill = id; return renderHome(); }
+        joining = true;
+        pendingRoom = id;
+        app.innerHTML = '<div class="card loading"><div class="loader"></div>正在加入房间…</div>';
+        socket.emit('room:join', { roomId: id, token: savedToken }, result => {
+          joining = false;
+          pendingRoom = '';
+          if (!result?.ok) {
+            homeError = resultError(result); roomPrefill = id;
+            if (roomId === id) { roomId = ''; token = ''; updateUrl(''); }
+            state = null; renderHome(); showToast(homeError, true); return;
+          }
+          saveRoom(result.roomId, result.token);
+          state = result.state; homeError = ''; roomPrefill = '';
+          renderGame();
+        });
+      }
+      function createRoom() {
+        if (!socket.connected) return showToast('正在连接服务器，请稍后再试', true);
+        const button = document.getElementById('createRoom'); if (button) button.disabled = true;
+        socket.emit('room:create', {}, result => {
+          if (!result?.ok) { if (button) button.disabled = false; return showToast(resultError(result), true); }
+          saveRoom(result.roomId, result.token); state = result.state; homeError = ''; renderGame();
+          showToast('房间已创建，复制链接邀请好友');
+        });
+      }
+      function copyLink() {
+        const link = location.origin + location.pathname + '?room=' + encodeURIComponent(roomId);
+        const done = () => showToast('链接已复制，发给好友');
+        if (navigator.clipboard?.writeText) navigator.clipboard.writeText(link).then(done).catch(() => fallbackCopy(link, done));
+        else fallbackCopy(link, done);
+      }
+      function fallbackCopy(text, done) {
+        const input = document.createElement('textarea'); input.value = text; input.style.position = 'fixed'; input.style.opacity = '0'; document.body.appendChild(input); input.select();
+        try { document.execCommand('copy'); done(); } catch { showToast('复制失败，请手动复制地址栏链接', true); }
+        input.remove();
+      }
+      const own = () => state?.players?.[state.selfIndex] || null;
+      function playerCard(player, index) {
+        if (!player) return `<article class="card player"><div class="player-top"><div class="avatar">⌛</div><div class="pname">等待对手加入</div><span class="badge">空位</span></div><div class="player-state"><span>分享房间号邀请好友</span><span>—</span></div></article>`;
+        const current = state.phase === 'playing' && state.turnIndex === index;
+        const badge = player.online ? (current ? '当前回合' : '已连接') : '离线 / 重连中';
+        return `<article class="card player ${current ? 'current' : ''}"><div class="player-top"><div class="avatar">${index === 0 ? '🌤️' : '🌊'}</div><div class="pname">${esc(player.name)} ${index === state.selfIndex ? '<span class="you">你</span>' : ''}</div><span class="badge ${player.online ? 'online' : 'offline'}">${badge}</span></div><div class="player-state"><span>密码 ${player.locked ? '已锁定' : '未锁定'}</span><span>${player.dice == null ? '骰子 —' : '骰子 ' + player.dice}</span></div></article>`;
+      }
+      function renderStage(s) {
+        const me = own();
+        if (s.phase === 'waiting') return `<section class="card stage"><div class="stage-content"><h2>房间已创建，等待对手</h2><p>把房间链接或房间号发给好友。对方加入后即可设置密码开始。</p><div class="notice" style="margin-top:15px">房间号：<b>${esc(s.roomId)}</b>　·　当前 ${s.onlineCount}/2 人在线</div></div></section>`;
+        if (s.phase === 'setup') return `<section class="card stage"><div class="stage-head"><div><h2>准备阶段 · 设置你的密码</h2><p>输入三位数字，可重复，也可以以 0 开头。密码仅由服务端保密保存。</p></div><span class="badge">${s.players.every(p => p?.online) ? '双方就位' : '等待玩家在线'}</span></div><div class="stage-content"><div class="setup-box">${me?.locked ? `<p>🔒 你的密码已锁定。等待对方完成设置后，双方一起掷骰。</p><button class="btn secondary small" id="unlockSecret" ${s.players.some(p => p?.dice != null) ? 'disabled' : ''}>修改我的密码</button>` : `<form id="secretForm"><label class="section-label" for="secretInput">我的三位密码</label><div class="digit-row"><input id="secretInput" class="input digit-input" inputmode="numeric" autocomplete="new-password" maxlength="3" placeholder="•••" aria-label="三位密码"><button class="btn primary" type="submit">锁定密码</button></div></form>`}</div></div></section>`;
+        if (s.phase === 'dice') return `<section class="card stage"><div class="stage-head"><div><h2>掷骰决定先手</h2><p>双方各掷一次，点数较大者先猜。点数相同则重新投掷。</p></div><span class="badge">${s.diceTie ? '点数相同，再投一次' : '等待双方掷骰'}</span></div><div class="stage-content"><div class="dice-area">${s.players.map((p, i) => `<div class="dice-box ${pending && i === s.selfIndex ? 'roll' : ''}"><div class="subtle">${esc(p?.name || ('玩家 ' + (i ? 'B' : 'A')))} ${i === s.selfIndex ? '· 你' : ''}</div><div class="die">${p?.dice == null ? '⚄' : p.dice}</div>${i === s.selfIndex ? `<button class="btn primary" data-roll ${p?.dice != null || pending || s.paused ? 'disabled' : ''}>${p?.dice != null ? '已掷骰' : '掷骰子'}</button>` : `<div class="subtle">${p?.dice != null ? '已完成' : '等待对手'}</div>`}</div>`).join('')}</div>${s.diceTie ? '<div class="notice">双方点数相同，请重新掷骰。</div>' : ''}</div></section>`;
+        if (s.phase === 'playing') {
+          const myTurn = s.turnIndex === s.selfIndex;
+          return `<section class="card stage"><div class="stage-head"><div><h2>${s.paused ? '对局暂停，等待重连' : myTurn ? '轮到你猜了' : '等待对手猜测'}</h2><p>${s.paused ? '对手网络断开，重连后自动继续。' : myTurn ? '猜测对手的三位密码；每次提交后轮到另一位玩家。' : '对手正在思考，猜测结果会实时同步。'}</p></div><span class="badge ${myTurn && !s.paused ? 'online' : ''}">${s.paused ? '已暂停' : myTurn ? '你的回合' : '对手回合'}</span></div><div class="stage-content">${myTurn ? `<form id="guessForm"><label class="section-label" for="guessInput">输入三位数字猜测</label><div class="guess-line"><input id="guessInput" class="input digit-input" inputmode="numeric" autocomplete="off" maxlength="3" placeholder="000" ${s.paused || pending ? 'disabled' : ''} aria-label="三位猜测"><button class="btn primary" type="submit" ${s.paused || pending ? 'disabled' : ''}>提交猜测</button></div></form>` : '<div class="notice">🔒 猜测输入已锁定，等对手完成本回合。</div>'}</div></section>`;
+        }
+        if (s.phase === 'finished') {
+          const winner = s.players[s.winner];
+          const already = me?.rematch;
+          return `<section class="card stage"><div class="stage-content"><div class="winner"><div class="trophy">🏆</div><strong>${esc(winner?.name || '玩家')} 获胜！</strong><span class="subtle">本局胜负由服务端确认 · 当前比分 ${s.scores?.[0] ?? 0} : ${s.scores?.[1] ?? 0}</span></div><h2 style="text-align:center">再来一局？</h2><p style="text-align:center;margin-bottom:14px">${already ? '你已准备好，等待对手确认。' : '房间会保留，双方确认后重新设置密码。'}</p><button class="btn primary wide" id="rematch" ${already ? 'disabled' : ''}>${already ? '已准备，等待对手' : '再来一局'}</button></div></section>`;
+        }
+        return '';
+      }
+      function renderGame() {
+        if (!state || state.selfIndex < 0) return renderHome();
+        const paused = state.paused;
+        const turnText = state.phase === 'playing' ? (paused ? '对手离线，对局暂停' : state.turnIndex === state.selfIndex ? '轮到你行动' : '等待对手行动') : ({waiting:'等待第二位玩家',setup:'准备设置密码',dice:'掷骰决定先手',finished:'本局已结束'}[state.phase] || '游戏进行中');
+        const history = [...(state.history || [])].reverse();
+        app.innerHTML = `<div class="card game-head"><div class="room-meta"><div class="room-symbol">🎲</div><div><div class="room-code">房间 ${esc(state.roomId)}</div><div class="subtle">${state.onlineCount}/2 位玩家在线</div></div></div><div class="head-actions"><button class="btn secondary small" data-copy>复制链接</button><button class="btn secondary small" data-leave>退出</button></div></div>
+          ${!socket.connected ? '<div class="error-box" style="margin:0 0 13px">与服务器断开，正在自动重连，请稍候。</div>' : ''}
+          ${state.notice ? `<div class="notice" style="margin-bottom:13px">${esc(state.notice)}</div>` : ''}
+          ${paused ? '<div class="error-box" style="margin:0 0 13px">对手已断线，对局暂时暂停；请等待重连（最长 90 秒）。</div>' : ''}
+          <div class="card statusbar"><div><div class="status-title">${turnText}</div><div class="status-desc">${state.phase === 'playing' ? '只统计数字与位置都正确的个数' : '分享房间链接，让好友加入对战'}</div></div><div class="score"><span>比分</span><b>${state.scores?.[0] ?? 0}</b><span>:</span><b>${state.scores?.[1] ?? 0}</b></div></div>
+          <div class="players">${state.players.map((p, i) => playerCard(p, i)).join('')}</div>
+          ${renderStage(state)}
+          <section class="card history"><div class="history-head"><h3>对局记录</h3><span class="subtle">${history.length} 次猜测</span></div><div class="history-list">${history.length ? history.map(item => `<div class="history-item"><span>${esc(state.players[item.playerIndex]?.name || '玩家')} ${item.playerIndex === state.selfIndex ? '<span class="you">你</span>' : ''}</span><span class="guess-code">${esc(item.guess)}</span><span class="hit">命中 ${item.hits}/3</span></div>`).join('') : '<div class="empty">对局开始后，猜测记录会显示在这里</div>'}</div></section>
+          <div class="bottom"><span>🔐 密码、命中数、回合与胜负由服务端管理</span><div class="actions"><button class="btn secondary small" data-copy>分享房间</button></div></div>`;
+        app.querySelectorAll('[data-copy]').forEach(el => el.addEventListener('click', copyLink));
+        app.querySelector('[data-leave]').addEventListener('click', leaveRoom);
+        const secretInput = document.getElementById('secretInput');
+        if (secretInput) secretInput.addEventListener('input', () => { secretInput.value = secretInput.value.replace(/\D/g, '').slice(0, 3); });
+        const secretForm = document.getElementById('secretForm');
+        if (secretForm) secretForm.addEventListener('submit', event => {
+          event.preventDefault(); const secret = secretInput.value;
+          if (!/^\d{3}$/.test(secret)) return showToast('请输入完整的 3 位数字', true);
+          socket.emit('secret:set', { secret }, result => result?.ok ? showToast('密码已锁定') : showToast(resultError(result), true));
+        });
+        document.getElementById('unlockSecret')?.addEventListener('click', () => socket.emit('secret:unlock', {}, result => result?.ok ? showToast('已解锁，请重新设置密码') : showToast(resultError(result), true)));
+        app.querySelectorAll('[data-roll]').forEach(button => button.addEventListener('click', () => {
+          if (pending) return; pending = true; renderGame();
+          socket.emit('dice:roll', {}, result => { pending = false; if (!result?.ok) showToast(resultError(result), true); });
+        }));
+        const guessInput = document.getElementById('guessInput');
+        if (guessInput) guessInput.addEventListener('input', () => { guessInput.value = guessInput.value.replace(/\D/g, '').slice(0, 3); });
+        document.getElementById('guessForm')?.addEventListener('submit', event => {
+          event.preventDefault(); const guess = guessInput.value;
+          if (!/^\d{3}$/.test(guess)) return showToast('请输入完整的 3 位数字', true);
+          pending = true; renderGame();
+          socket.emit('guess:submit', { guess }, result => { pending = false; if (!result?.ok) showToast(resultError(result), true); else showToast('猜测已提交，结果已同步'); });
+        });
+        document.getElementById('rematch')?.addEventListener('click', () => socket.emit('match:rematch', {}, result => result?.ok ? showToast('已准备好，等待对手确认') : showToast(resultError(result), true)));
+      }
+      function leaveRoom() {
+        if (!roomId) return renderHome();
+        const oldId = roomId;
+        socket.emit('room:leave', {}, () => {
+          localStorage.removeItem('duiwei-token:' + oldId); roomId = ''; token = ''; state = null; homeError = ''; roomPrefill = ''; updateUrl(''); renderHome();
+        });
+      }
+      socket.on('connect', () => {
+        setNetwork('on');
+        if (roomId) { joining = false; joinRoom(roomId, token || localStorage.getItem('duiwei-token:' + roomId) || ''); }
+        else if (pendingRoom) { joining = false; joinRoom(pendingRoom, localStorage.getItem('duiwei-token:' + pendingRoom) || ''); }
+        else if (!state) renderHome();
+      });
+      socket.on('disconnect', () => { setNetwork('off'); joining = false; if (state) renderGame(); else renderHome(); });
+      socket.on('connect_error', () => setNetwork('off'));
+      socket.on('room:state', incoming => {
+        if (!roomId || incoming.roomId !== roomId || incoming.selfIndex < 0) return;
+        state = incoming;
+        if (incoming.notice && incoming.noticeId && incoming.noticeId !== lastNotice) { lastNotice = incoming.noticeId; showToast(incoming.notice, !incoming.notice.includes('加入')); }
+        renderGame();
+      });
+      if (!initialRoom) renderHome();
+      else if (socket.connected) joinRoom(initialRoom, token);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "duiwei-cai-shuzi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "对位猜数字 · 双人在线对战",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "check": "node --check server.js && node scripts/check-inline.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  }
+}
